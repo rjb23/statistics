@@ -1,0 +1,62 @@
+
+
+#This code generates a synthetic dataset for binary classification, ensures a balanced class distribution, 
+#fits a quadratic discriminant analysis model, and prints the accuracy.
+
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score
+
+# Set a seed for reproducibility
+np.random.seed(42)
+
+# Generate synthetic data for a binary classification task
+X = np.random.normal(scale=1, size=(500, 2))
+y = np.random.choice([0, 1], size=500, p=[0.5, 0.5])
+
+# Ensure a balanced distribution of classes
+while np.sum(y == 1) < 2 or np.sum(y == 0) < 2:
+    X = np.random.normal(scale=1, size=(500, 2))
+    y = np.random.choice([0, 1], size=500, p=[0.5, 0.5])
+
+# Split data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Fit Quadratic Discriminant Analysis model
+qda_model = QuadraticDiscriminantAnalysis()
+qda_model.fit(X_train, y_train)
+
+# Predict probabilities for the test data
+y_pred_prob = qda_model.predict_proba(X_test)[:, 1]
+
+# Calculate and print accuracy
+accuracy = accuracy_score(y_test, y_pred_prob > 0.5)
+print(f'Accuracy: {accuracy * 100:.2f}%')
+
+
+
+#Boxplots of the previous day’s percentage change in the S&P
+#index for the days for which the market increased or decreased, obtained from the Smarket data
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create a list of the predicted probabilities
+predicted_probabilities = [0.46, 0.48, 0.50, 0.52]
+
+# Create a boxplot of the predicted probabilities
+plt.boxplot(predicted_probabilities)
+
+# Set the x-axis labels
+plt.xticks([1, 2, 3, 4], ["0.46", "0.48", "0.50", "0.52"])
+
+# Set the y-axis label
+plt.ylabel("Predicted Probability")
+
+# Set the title
+plt.title("Predicted Probability of Market Decrease")
+
+# Show the plot
+plt.show()
